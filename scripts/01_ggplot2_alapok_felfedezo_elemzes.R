@@ -51,10 +51,12 @@ ggplot(data = mpg) +
 ## 2.1 Gyakorlas - az abrakeszites alapjai ----------------
 
 # 1) Mit mutat a drv valtozo? 
+?mpg
+#the type of drive train, where f = front-wheel drive, r = rear wheel drive, 4 = 4wd
 
 # 2) Keszitsunk pontfelhot hwy es cty valtozokrol!
 
-
+ggplot(data = mpg) + geom_point(mapping = aes(x = hwy, y = cty))
 
 #### 3. Esztetikai parameterek beallitasa --------------------------------
 
