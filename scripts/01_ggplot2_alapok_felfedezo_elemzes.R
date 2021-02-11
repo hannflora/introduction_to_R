@@ -1,6 +1,6 @@
 ###### Fedezzunk fel adatokat vizualisan a ggplot2-vel!
 
-
+#halo
 #### 0. Elokeszuletek ----------------  
 
 # Toltsuk be a tidyverse csomagot 
