@@ -1,5 +1,6 @@
 ###### Fedezzunk fel adatokat vizualisan a ggplot2-vel!
 
+#halo kkk
 
 #### 0. Elokeszuletek ----------------  
 
