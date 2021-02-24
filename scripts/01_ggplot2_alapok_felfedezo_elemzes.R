@@ -1,7 +1,5 @@
 ###### Fedezzunk fel adatokat vizualisan a ggplot2-vel!
 
-#halo kkk
-
 #### 0. Elokeszuletek ----------------  
 
 # Toltsuk be a tidyverse csomagot 
@@ -23,6 +21,7 @@ mpg
 nrow(mpg)
 ncol(mpg)
 dim(mpg)
+min(mpg$year)
 
 # Mi a strukturaja? Az str() egy nagyon hasznos fuggveny.
 str(mpg)
@@ -53,7 +52,8 @@ ggplot(data = mpg) +
 
 # 1) Mit mutat a drv valtozo? 
 ?mpg
-#the type of drive train, where f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+# The type of drive train, where f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+# A meghajtást.
 
 # 2) Keszitsunk pontfelhot hwy es cty valtozokrol!
 
@@ -78,10 +78,12 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
 
 # Hogyan rendelnétek hozzá az osztályt a pontok méretéhez?
-
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, size = class))
 
 # És a pontok formájához?
-
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
 
 # Az esztétikai paramétereket kézileg is állíthatjuk. 
 # Ilyenkor az aes() után, a geom függvény egy argumentumának 
@@ -98,8 +100,7 @@ ggplot(data = mpg) +
 
 minta_adat <- data.frame(x = 1:24, 
                          y = 1:24, 
-                         z = factor(1:24)
-)
+                         z = factor(1:24))
 
 ggplot(data = minta_adat) +
   geom_point(aes(x = x, y = y, shape = z), colour = "black", fill = "red", size = 8) + 
@@ -110,35 +111,59 @@ ggplot(data = minta_adat) +
 
 # 1) Miért nem kékek a pontok?
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+  geom_point(mapping = aes(x = displ, y = hwy color = "blue"))
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
 
 # 2) Melyek a folytonos es kategorikus változók az mpg-ben? 
+?mpg
 
+mpg
 
 # 3) color, shape, size hogyan viselkedik, ha folytonos változót rendelünk hozzá?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = manufacturer, y = cty, color = year))
 
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = manufacturer, y = cty, shape = year))
+#folytonos változónál nem lehet shape
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = manufacturer, y = cty, size = year))
 
 # 4) Mi történik, ha egy változót több esztétikai paraméterhez is hozzárendelünk?
-
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = manufacturer, y = cty, color = cty))
 
 # 5) Mi történik, ha nem egyszerűen egy változót használunk az esztétika megadásánál?
 # pl. aes(color=displ<5) ?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = hwy, y = manufacturer, color = displ <5))
 
+?geom_point
+
+vignette("ggplot2-specs")
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = hwy, y = manufacturer, stroke = displ <5), shape = 18)
 
 # 6) Miért nem működnek ezek a kódok?
 
-ggplot(data = mpg) 
-+ geom_point(mapping = aes(x = displ, y = hwy))
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
 
 
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy, color = "blue")
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
              
 # 7) Készíts egy pontfelhőt, ahol az x tg-en a displ, az y tg-en a hwy változó szerepel.
 # Használj 10-es méretű pontokat! Mi lehet a probléma ezzel az ábrával? 
 # Hogyan lehetne javítani az ábrán, anélkül, hogy a pontok méretén változtatnál?
 
-
+ggplot(data = mpg) +
+  geom_jitter(mapping = aes(x = displ, y = hwy), size = 10, alpha = 0.1)
 
 #### 4. Facet-ek --------------------------------
 
@@ -172,14 +197,26 @@ ggplot(data = mpg) +
 ## 4.1 Gyakorlas - facetek ----------------
 
 # 1) Mi történik, ha folytonos változót rendelünk facet-hez?
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap( ~ year)
+structure(mpg)
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = year, y = displ))
 
-# 2) Mit jelentenek az ures cellak a facet_grid(drv~class) abran?
+# !!! 2) Mit jelentenek az ures cellak a facet_grid(drv~class) abran?
 # Hogyan viszonyulnak ehhez?
 
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = drv, y = cyl))
 
-# 3) Mi tortenik itt? Mit csinal a . ?
+?mpg
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = hwy, y = displ)) + 
+  facet_grid(drv ~ cyl)
+
+!# 3) Mi tortenik itt? Mit csinal a . ?
 
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy)) +
@@ -194,7 +231,9 @@ ggplot(data = mpg) +
 # A pontok színe tükrözze a hengerek számát!
 # Az üzemanyag típusa szerint hozz létre faceteket!
 
-
+ggplot(data = mpg) +
+  geom_point (mapping = aes(x = cty, y = hwy, color = cyl)) +
+  facet_wrap( ~ fl)
 
 # 5) Mik az előnyei és hátrányai a fazettázásnak az 
 # esztétikai paraméterekhez rendeléshez képest?
@@ -204,6 +243,7 @@ ggplot(data = mpg) +
   facet_wrap(~ class, nrow = 2)
 
 # 6) facet_wrap-ban mit csinal ncol es nrow? Mit lehet meg beallitani?
+?facet_wrap
 
 #### 5. Geometriai objektumok (geom) --------------------------------
 
@@ -277,6 +317,12 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 
 ggplot(data = mpg, mapping = aes(x = hwy)) + 
   geom_histogram(binwidth = 1)
+
+ggplot(data = mpg, mapping = aes(x = hwy, y = displ)) + 
+  geom_line()
+
+ggplot(data = mpg, mapping = aes(x = hwy, y = displ)) + 
+  geom_boxplot(mapping = aes(group = class))
 
 # 2) A kód futtatása előtt írd le szavakkal, hogy fog kinézni az ábra!
 
