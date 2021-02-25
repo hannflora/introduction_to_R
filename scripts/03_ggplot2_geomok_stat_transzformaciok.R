@@ -56,8 +56,7 @@ ggplot(data = diamonds) +
         mapping = aes(x = cut, y = depth),
         fun.ymin = min,
         fun.ymax = max,
-        fun.y = median
-    ) 
+        fun.y = median)
 
 
 
@@ -70,9 +69,38 @@ ggplot(data = diamonds) +
 # 1) Mi a stat_summary() default geom-ja? 
 # Reprodukald a legutobbi abrat egy geom fuggvennyel!
 
+ggplot(data = diamonds) +
+  geom_pointrange(
+    mapping = aes(x = cut, y = depth),
+    stat = "summary")
+
+ggplot(data = diamonds) +
+  geom_pointrange(
+    mapping = aes(x = cut, y = depth),
+    stat = "summary",
+    fun.min = min,
+    fun.max = max,
+    fun = median)
+
 # 2) Mit csinal a geom_col()? Miben kulonbozik a geom_bar()-tol?
+ggplot(data = diamonds) +
+  geom_col(mapping = aes(x = cut, y = price))
+
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+
+?geom_col
 
 # 3) Milyen ertekeket szamol a stat_smooth()? Milyen parameterekkel vezerelheto?
+
+ggplot(data = diamonds) +
+  stat_smooth(mapping = aes(x = cut, y = price))
+
+ggplot(data = diamonds) +
+stat_smooth(mapping = aes(x = cut, y = depth),
+            position = "identity", method = "auto",
+            formula = y ~ x, se = TRUE, n = 80, fullrange = FALSE,
+            level = 0.95, na.rm = FALSE)
 
 # 4) Az aranyokat mutato oszlopdiagram kodjaban miert van group=1?
 # Mi a problema a ket alatta meghatarozott abraval?
@@ -143,9 +171,27 @@ ggplot(data = mpg) +
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
     geom_point()
 
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_jitter()
+
 # 2. geom_jitter() fuggvenyben hogyan lehet szabalyozni a zaj merteket?
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_jitter(width = 0.7, height = 0.7)
+
+?geom_jitter
 
 # 3. Mi a kulonbseg a geom_jitter() es a geom_count() kozott?
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_count()
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, color = class)) +
+  geom_jitter()
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, color = class)) +
+  geom_count()
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, color = class)) +
+  geom_count(position = "jitter")
 
 #### 8. Koordinata-rendszerek  --------------------------------
 
@@ -162,8 +208,7 @@ bar <- ggplot(data = diamonds) +
     geom_bar(
         mapping = aes(x = cut, fill = cut), 
         show.legend = FALSE,
-        width = 1
-    ) + 
+        width = 1) + 
     theme(aspect.ratio = 1) +
     labs(x = NULL, y = NULL)
 
@@ -174,7 +219,8 @@ bar + coord_polar()
 
 # 1) Keszits "polcolt" (stacked) oszlopbol tortat a coord_polar() fuggvennyel!
 
-
+ggplot(data = diamonds) +
+  
 
 
 # 2) Mit árul el ez az ábra a városi és az országúti fogyasztás kapcsolatáról?
